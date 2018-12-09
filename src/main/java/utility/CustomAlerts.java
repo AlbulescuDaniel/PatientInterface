@@ -34,21 +34,21 @@ public class CustomAlerts {
     alert.showAndWait();
   }
 
-//  public static void showemptyPrescriptionListAlert() {
-//    Alert alert = new Alert(AlertType.INFORMATION);
-//    alert.setTitle("Empty list");
-//    alert.setHeaderText("Prescription:");
-//    alert.setContentText("This patient does not have any prescription in this period");
-//    alert.showAndWait();
-//  }
-//
-//  public static void showPatientDoesNotExistAlert() {
-//    Alert alert = new Alert(AlertType.ERROR);
-//    alert.setTitle("Database eror");
-//    alert.setHeaderText("Error:");
-//    alert.setContentText("Patient does not exist");
-//    alert.showAndWait();
-//  }
+  public static void showemptyPrescriptionListAlert() {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Empty list");
+    alert.setHeaderText("Prescription:");
+    alert.setContentText("This patient does not have any prescription in this period");
+    alert.showAndWait();
+  }
+
+  public static void showPatientDoesNotExistAlert() {
+    Alert alert = new Alert(AlertType.ERROR);
+    alert.setTitle("Database eror");
+    alert.setHeaderText("Error:");
+    alert.setContentText("Patient does not exist");
+    alert.showAndWait();
+  }
 //
 //  public static void showDoctorDoesNotExistAlert() {
 //    Alert alert = new Alert(AlertType.ERROR);
