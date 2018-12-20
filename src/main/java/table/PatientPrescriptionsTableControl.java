@@ -35,6 +35,7 @@ public class PatientPrescriptionsTableControl {
   public static void initializePrescriptionTable(List<Prescription> prescriptions, TableView<PatientPrescriptionsTableFormat> table, TableColumn<PatientPrescriptionsTableFormat, String> diagnostic,
       TableColumn<PatientPrescriptionsTableFormat, String> days, TableColumn<PatientPrescriptionsTableFormat, Date> prescriptionDate,
       TableColumn<PatientPrescriptionsTableFormat, Long> prescriptionTableId) {
+    System.err.println(prescriptions.size());
     days.setStyle("-fx-padding: 0 0 0 10;");
     prescriptionDate.setStyle("-fx-padding: 0 0 0 10;");
     diagnostic.setStyle("-fx-padding: 0 0 0 10;");

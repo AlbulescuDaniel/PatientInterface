@@ -12,8 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class PrescriptionDetailsTableControl {
@@ -53,8 +51,7 @@ public class PrescriptionDetailsTableControl {
   }
 
   public static void setWidth(GridPane pane, TableView<PatientPrescriptionsTableFormat> table, TableColumn<CreatePrescriptionTableFormat, String> medicamentName,
-      TableColumn<CreatePrescriptionTableFormat, String> daysLabel, TableColumn<CreatePrescriptionTableFormat, String> pills, TableColumn<CreatePrescriptionTableFormat, String> observations,
-      AnchorPane registerPatientAnchorPane) {
+      TableColumn<CreatePrescriptionTableFormat, String> daysLabel, TableColumn<CreatePrescriptionTableFormat, String> pills, TableColumn<CreatePrescriptionTableFormat, String> observations) {
 
     medicamentName.setStyle("-fx-padding: 0 0 0 10;");
     daysLabel.setStyle("-fx-padding: 0 0 0 10;");
@@ -62,7 +59,6 @@ public class PrescriptionDetailsTableControl {
     observations.setStyle("-fx-padding: 0 0 0 10;");
 
     pane.widthProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) -> {
-      registerPatientAnchorPane.setPrefWidth(newSceneWidth.doubleValue());
       medicamentName.setPrefWidth(newSceneWidth.doubleValue() * 30 / 100);
       daysLabel.setPrefWidth(table.getPrefWidth() * 10 / 100);
       pills.setPrefWidth(table.getPrefWidth() * 10 / 100);

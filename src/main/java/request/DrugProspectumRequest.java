@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -16,26 +14,25 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import constant.Consts;
-import entity.Prescription;
+import entity.Drug;
 import utility.CustomAlerts;
 import utility.JWTInfo;
 
-public class PrescriptionsTabRequest {
+public class DrugProspectumRequest {
 
-  private PrescriptionsTabRequest() {
+  private DrugProspectumRequest() {
   }
 
-  public static List<Prescription> requestFillPrescriptionTable(LocalDate from, LocalDate to, JWTInfo token) throws IOException {
+  public static Drug drugProspectumRequest(String name, JWTInfo token) throws IOException {
     // if (!new Utility().isOnline()) {
     // CustomAlerts.showInternetErrorConnectionAlert();
     // throw new IOException();
     // }
 
-    from = from.minusDays(1);
-    to = to.plusDays(1);
+    URL obj = new URL(((Consts.LOCAL_SERVER ? Consts.DRUG_PROSPECTUS_URL : Consts.OPENSHIFT_DRUG_PROSPECTUS_URL) + "?name=" + name).replaceAll(" ", "%20"));
 
-    URL obj = new URL((Consts.LOCAL_SERVER ? Consts.FILL_PRESCRIPTION_TABLE_URL : Consts.OPENSHIFT_FILL_PRESCRIPTION_TABLE_URL) + "/" + token.getUser() + "?startDate=" + from + "&endDate=" + to);
-
+    System.out.println(obj.toString());
+    
     HttpURLConnection con = (HttpURLConnection)obj.openConnection();
     con.setRequestMethod("GET");
     con.setRequestProperty("Content-Type", "application/json");
@@ -47,6 +44,11 @@ public class PrescriptionsTabRequest {
     }
     catch (Exception e) {
       CustomAlerts.showServerErrorConnectionAlert();
+      throw new IOException();
+    }
+    
+    if(name.equals("")) {
+      CustomAlerts.showEmptyFieldsAlert();
       throw new IOException();
     }
 
@@ -61,31 +63,32 @@ public class PrescriptionsTabRequest {
       in.close();
 
       JSONArray jsonArray = new JSONArray(response.toString());
-      List<Prescription> prescriptions = new ArrayList<>();
+      List<Drug> drugs = new ArrayList<>();
       for (Object object : jsonArray) {
         Gson gson = new GsonBuilder().create();
-        prescriptions.add(gson.fromJson(object.toString().trim(), Prescription.class));
+        drugs.add(gson.fromJson(object.toString().trim(), Drug.class));
       }
-      System.out.println("ajunge");
-      System.out.println(prescriptions.size());
-      
-      if (prescriptions.size() == 0) {
-        CustomAlerts.showemptyPrescriptionListAlert();
+
+      if (drugs.size() == 0) {
+        CustomAlerts.showemptyDrugListAlert();
         throw new IOException();
       }
 
-      return prescriptions;
+      if (drugs.size() == 1) {
+        return drugs.get(1);
+      }
+      else {
+        return CustomAlerts.showemptyDrugMultipleAlert(drugs);
+      }
     }
     else if (con.getResponseCode() == 503) {
       CustomAlerts.showServiceUnavailableAlert();
       throw new IOException();
     }
     else if (con.getResponseCode() == 404) {
-      CustomAlerts.showPatientDoesNotExistAlert();
+      CustomAlerts.showDrugDoesNotExistAlert();
       throw new IOException();
     }
-    else {
-      return Collections.emptyList();
-    }
+    return new Drug();
   }
 }

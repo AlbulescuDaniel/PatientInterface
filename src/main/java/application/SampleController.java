@@ -2,11 +2,14 @@ package application;
 
 import java.io.IOException;
 
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import request.LoginSceneRequest;
@@ -16,6 +19,9 @@ public class SampleController {
 
 	@FXML
 	private GridPane datesGrid;
+	
+	@FXML
+  private AnchorPane anchorPane;
 
 	@FXML
 	private Button logInButton;
@@ -28,13 +34,16 @@ public class SampleController {
 
 	@FXML
 	private Text errorText;
+	
+	@FXML
+  private ImageView imageViewBackground;
 
   private JWTInfo parsedJWT;
 
 	@FXML
 	private void initialize() {
 
-	  userNameTextField.setText("abc");
+	  userNameTextField.setText("Patient.Name");
     passwordField.setText("aA1!aaaa");
     datesGrid.getStyleClass().add("dates-grid");
 
@@ -62,6 +71,14 @@ public class SampleController {
         }
       };
       task.run();
+    });
+    
+    anchorPane.widthProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) -> {
+      imageViewBackground.setFitWidth(newSceneWidth.doubleValue());
+    });
+    
+    anchorPane.heightProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) -> {
+      imageViewBackground.setFitHeight(newSceneHeight.doubleValue());
     });
 	}
 }

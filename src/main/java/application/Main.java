@@ -16,6 +16,11 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) {
     Main.primaryStage = primaryStage;
+    Main.primaryStage.setWidth(1200);
+    Main.primaryStage.setMinWidth(1200);
+    Main.primaryStage.setHeight(800);
+    Main.primaryStage.setMinHeight(800);
+    Main.primaryStage.setResizable(true);
     showClientView();
   }
 
@@ -23,16 +28,11 @@ public class Main extends Application {
     launch(args);
   }
 
-  public void showClientView() {
+  public static void showClientView() {
     try {
-      Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/fxml/PatientLogin.fxml")));
-      scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
+      Scene scene = new Scene(FXMLLoader.load(Main.class.getResource("/fxml/PatientLogin.fxml")));
+      scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
       primaryStage.setScene(scene);
-      primaryStage.setWidth(1200);
-      primaryStage.setMinWidth(1200);
-      primaryStage.setHeight(800);
-      primaryStage.setMinHeight(800);
-      primaryStage.setResizable(true);
       primaryStage.show();
     }
     catch (IOException e) {
@@ -43,20 +43,18 @@ public class Main extends Application {
   public static void showMainPatientView(JWTInfo parsedJWT) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader();
     fxmlLoader.setLocation(Main.class.getResource("/fxml/PatientPrincipalScene.fxml"));
-    GridPane pane = fxmlLoader.load();
+    
+    ClientMainController controller = new ClientMainController();
+    controller.setToken(parsedJWT);
+    
+    fxmlLoader.setController(controller);
 
-    ClientMainController cvc = fxmlLoader.getController();
-    cvc.setToken(parsedJWT);
+    GridPane pane = fxmlLoader.load();
 
     Scene scene = new Scene(pane, 1200, 800);
     scene.getStylesheets().add(Main.class.getResource("/css/application.css").toExternalForm());
 
     primaryStage.setScene(scene);
-    primaryStage.setWidth(1200);
-    primaryStage.setMinWidth(1200);
-    primaryStage.setHeight(800);
-    primaryStage.setMinHeight(800);
-    primaryStage.setResizable(true);
     primaryStage.show();
   }
 }
