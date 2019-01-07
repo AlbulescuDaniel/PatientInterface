@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
 
 import entity.Drug;
+import entity.PatientProfile;
 import entity.Prescription;
 import entity.PrescriptionDetails;
 import javafx.beans.value.ObservableValue;
@@ -25,12 +26,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import request.DrugProspectumRequest;
+import request.PatientProfileRequest;
 import request.PrescriptionDetailsRequest;
 import request.PrescriptionsTabRequest;
 import table.CreatePrescriptionTableFormat;
 import table.PatientPrescriptionsTableControl;
 import table.PatientPrescriptionsTableFormat;
 import table.PrescriptionDetailsTableControl;
+import table.ProfileScene;
 import utility.DateFormatConverter;
 import utility.JWTInfo;
 
@@ -271,6 +274,17 @@ public class ClientMainController {
       if (newVal.equals("Logout")) {
         this.setToken(null);
         Main.showClientView();
+      }
+      if (newVal.equals("Profile")) {
+        try {
+          PatientProfile patientProfile = PatientProfileRequest.doctorProfileRequest(token);
+          new ProfileScene().initProfile(patientProfile);
+        }
+        catch (Exception e1) {
+          e1.printStackTrace();
+        }
+//        logOutComboBox.getItems().removeAll(logOutComboBox.getItems());
+//        logOutComboBox.setItems(FXCollections.observableArrayList("Logout", "Profile"));
       }
     });
     
