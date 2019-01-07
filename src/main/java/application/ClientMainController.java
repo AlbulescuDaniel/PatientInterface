@@ -201,7 +201,6 @@ public class ClientMainController {
         PatientPrescriptionsTableControl.initializePrescriptionTable(prescriptions, table, diagnostic, days, prescriptionDate, prescriptionTableId);
       }
       catch (IOException e) {
-        e.printStackTrace();
       }
     });
 
