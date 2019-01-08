@@ -629,12 +629,14 @@
 									<children>
 										<TableView fx:id="hospitalsTable" prefHeight="670.0" prefWidth="1200.0" GridPane.rowIndex="1">
 											<columns>
-												<TableColumn fx:id="hospitalName" prefWidth="250.0" text="Hospital name" />
+                                    <TableColumn fx:id="webSite" maxWidth="-Infinity" minWidth="-1.0" prefWidth="-1.0" />
+												<TableColumn fx:id="hospitalName" prefWidth="200.0" text="Hospital name" />
 												<TableColumn fx:id="hospitalCity" prefWidth="200.0" text="Hospital city" />
-												<TableColumn fx:id="hospitalStreet" minWidth="0.0" prefWidth="200.0" text="Hospital street" />
+                                    <TableColumn fx:id="hospitalRegion" prefWidth="124.0" text="Hospital region" />
+												<TableColumn fx:id="hospitalStreet" minWidth="0.0" prefWidth="151.0" text="Hospital street" />
 												<TableColumn fx:id="hospitalStreetNumber" prefWidth="150.0" text="Street Number" />
 												<TableColumn fx:id="hospitalPhone" prefWidth="150.0" text="Phone" />
-												<TableColumn fx:id="hospitalEmail" prefWidth="250.0" text="E-mail" />
+												<TableColumn fx:id="hospitalEmail" prefWidth="200.0" text="E-mail" />
 											</columns>
                                  <GridPane.margin>
                                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -642,8 +644,10 @@
 										</TableView>
 										<GridPane maxWidth="-Infinity" GridPane.halignment="CENTER">
 											<columnConstraints>
-												<ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
-												<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+												<ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+												<ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" />
 												<ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
 											</columnConstraints>
 											<rowConstraints>
@@ -651,13 +655,23 @@
 												<RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
 											</rowConstraints>
 											<children>
-												<Button fx:id="populateHospitalsTableButton" maxWidth="100.0" mnemonicParsing="false" text="Search" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-												<Label text="Search for hospitals" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+												<Button fx:id="populateHospitalsTableButton" maxWidth="100.0" mnemonicParsing="false" text="Search" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+												<Label text="Search for hospitals" GridPane.columnSpan="5" GridPane.halignment="CENTER">
 													<font>
 														<Font name="Calibri" size="20.0" />
 													</font>
 												</Label>
-												<TextField fx:id="cityInHospitalTab" prefWidth="280.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+												<TextField fx:id="specializationInHospitalTab" prefWidth="280.0" promptText="Optional" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </GridPane.margin></TextField>
+                                    <TextField fx:id="cityInHospitalTab" prefWidth="280.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <Label text="City" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                    <Label text="Specialization" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
 											</children>
 										</GridPane>
 									</children>

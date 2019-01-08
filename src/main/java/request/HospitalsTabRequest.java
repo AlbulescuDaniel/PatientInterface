@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -14,25 +15,29 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import constant.Consts;
-import entity.Drug;
+import entity.HospitalWithSpecialization;
 import utility.CustomAlerts;
 import utility.JWTInfo;
 
-public class DrugProspectumRequest {
+public class HospitalsTabRequest {
 
-  private DrugProspectumRequest() {
+  private HospitalsTabRequest() {
   }
 
-  public static Drug drugProspectumRequest(String name, JWTInfo token) throws IOException {
+  public static List<HospitalWithSpecialization> requestFillHospitalsTable(String city, String specialization, JWTInfo token) throws IOException {
     // if (!new Utility().isOnline()) {
     // CustomAlerts.showInternetErrorConnectionAlert();
     // throw new IOException();
     // }
 
-    URL obj = new URL(((Consts.LOCAL_SERVER ? Consts.DRUG_PROSPECTUS_URL : Consts.OPENSHIFT_DRUG_PROSPECTUS_URL) + "?name=" + name).replaceAll(" ", "%20"));
-
-    System.out.println(obj.toString());
+    if(city.equals("")) {
+      CustomAlerts.showEmptyFieldsAlert();
+      throw new IOException();
+    }
     
+    URL obj = new URL(
+        (Consts.LOCAL_SERVER ? Consts.FILL_HOSPITALS_TABLE_URL : Consts.OPENSHIFT_FILL_HOSPITALS_TABLE_URL) + "?city=" + city + "&specialization=" + specialization);
+
     HttpURLConnection con = (HttpURLConnection)obj.openConnection();
     con.setRequestMethod("GET");
     con.setRequestProperty("Content-Type", "application/json");
@@ -44,11 +49,6 @@ public class DrugProspectumRequest {
     }
     catch (Exception e) {
       CustomAlerts.showServerErrorConnectionAlert();
-      throw new IOException();
-    }
-    
-    if(name.equals("")) {
-      CustomAlerts.showEmptyFieldsAlert();
       throw new IOException();
     }
 
@@ -63,32 +63,29 @@ public class DrugProspectumRequest {
       in.close();
 
       JSONArray jsonArray = new JSONArray(response.toString());
-      List<Drug> drugs = new ArrayList<>();
+      List<HospitalWithSpecialization> hospitals = new ArrayList<>();
       for (Object object : jsonArray) {
         Gson gson = new GsonBuilder().create();
-        drugs.add(gson.fromJson(object.toString().trim(), Drug.class));
+        hospitals.add(gson.fromJson(object.toString().trim(), HospitalWithSpecialization.class));
       }
 
-      if (drugs.size() == 0) {
-        CustomAlerts.showemptyDrugListAlert();
+      if (hospitals.size() == 0) {
+        CustomAlerts.showemptyPrescriptionListAlert();
         throw new IOException();
       }
 
-      if (drugs.size() == 1) {
-        return drugs.get(0);
-      }
-      else {
-        return CustomAlerts.showemptyDrugMultipleAlert(drugs);
-      }
+      return hospitals;
     }
     else if (con.getResponseCode() == 503) {
       CustomAlerts.showServiceUnavailableAlert();
       throw new IOException();
     }
-    else if (con.getResponseCode() == 404) {
-      CustomAlerts.showDrugDoesNotExistAlert();
+    else if (con.getResponseCode() == 204) {
+      CustomAlerts.showemptyHospitalListAlert();
       throw new IOException();
     }
-    return new Drug();
+    else {
+      return Collections.emptyList();
+    }
   }
 }

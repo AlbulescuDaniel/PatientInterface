@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
 
 import entity.Drug;
+import entity.HospitalWithSpecialization;
 import entity.PatientProfile;
 import entity.Prescription;
 import entity.PrescriptionDetails;
@@ -26,10 +27,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import request.DrugProspectumRequest;
+import request.HospitalsTabRequest;
 import request.PatientProfileRequest;
 import request.PrescriptionDetailsRequest;
 import request.PrescriptionsTabRequest;
 import table.CreatePrescriptionTableFormat;
+import table.HospitalTableControl;
+import table.HospitalsTableFormat;
 import table.PatientPrescriptionsTableControl;
 import table.PatientPrescriptionsTableFormat;
 import table.PrescriptionDetailsTableControl;
@@ -50,6 +54,9 @@ public class ClientMainController {
 
   @FXML
   private TableView<CreatePrescriptionTableFormat> medicamentTable;
+
+  @FXML
+  private TableView<HospitalsTableFormat> hospitalsTable;
 
   @FXML
   private TableColumn<PatientPrescriptionsTableFormat, String> days;
@@ -74,6 +81,30 @@ public class ClientMainController {
 
   @FXML
   private TableColumn<CreatePrescriptionTableFormat, String> daysLabel;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> hospitalName;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> hospitalCity;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> hospitalRegion;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> hospitalStreet;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> hospitalStreetNumber;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> hospitalPhone;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> hospitalEmail;
+
+  @FXML
+  private TableColumn<HospitalsTableFormat, String> webSite;
 
   @FXML
   private Button populateTableButton;
@@ -116,7 +147,10 @@ public class ClientMainController {
 
   @FXML
   private Button drugSearchButton;
-  
+
+  @FXML
+  private Button populateHospitalsTableButton;
+
   @FXML
   private Label drugName;
 
@@ -155,25 +189,31 @@ public class ClientMainController {
 
   @FXML
   private Label drugMarketing;
-  
+
   @FXML
   private GridPane drugDetailsGridPane;
 
   @FXML
   private GridPane medicationTabGridMessage;
-  
+
   @FXML
   private ComboBox<String> logOutComboBox;
-  
+
   @FXML
   private Label taskBarUserName;
-  
+
   @FXML
   private TextField searchBoxDrugName;
-  
+
+  @FXML
+  private TextField cityInHospitalTab;
+
+  @FXML
+  private TextField specializationInHospitalTab;
+
   @FXML
   private ImageView imageViewBackground;
-  
+
   private JWTInfo token;
 
   public JWTInfo getToken() {
@@ -194,6 +234,7 @@ public class ClientMainController {
 
     PatientPrescriptionsTableControl.setWidth(pane, table, diagnostic, days, prescriptionDate, prescriptionTableId);
     PrescriptionDetailsTableControl.setWidth(pane, table, medicamentName, daysLabel, pills, observations);
+    HospitalTableControl.setWidth(pane, hospitalsTable, hospitalName, hospitalCity, hospitalRegion, hospitalStreet, hospitalStreetNumber, hospitalPhone, hospitalEmail, webSite);
 
     populateTableButton.setOnAction(event -> {
       try {
@@ -206,7 +247,7 @@ public class ClientMainController {
 
     table.setRowFactory(e -> {
       TableRow<PatientPrescriptionsTableFormat> row = new TableRow<>();
-      
+
       row.hoverProperty().addListener(observable -> {
         final PatientPrescriptionsTableFormat person = row.getItem();
 
@@ -217,7 +258,7 @@ public class ClientMainController {
           row.setStyle("-fx-background-color: linear-gradient(white 0%, white 90%, #e0e0e0 90%);");
         }
       });
-      
+
       row.setOnMouseClicked(event -> {
         if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
           PatientPrescriptionsTableFormat clickedRow = row.getItem();
@@ -243,7 +284,7 @@ public class ClientMainController {
       gridPanePrescription.setVisible(false);
       gridPanelTable.setVisible(true);
     });
-    
+
     drugSearchButton.setOnAction(event -> {
       try {
         Drug drug = DrugProspectumRequest.drugProspectumRequest(searchBoxDrugName.getText(), token);
@@ -280,19 +321,29 @@ public class ClientMainController {
           new ProfileScene().initProfile(patientProfile);
         }
         catch (Exception e1) {
-          e1.printStackTrace();
         }
-//        logOutComboBox.getItems().removeAll(logOutComboBox.getItems());
-//        logOutComboBox.setItems(FXCollections.observableArrayList("Logout", "Profile"));
       }
     });
-    
+
     pane.widthProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) -> {
       imageViewBackground.setFitWidth(newSceneWidth.doubleValue());
     });
-    
+
     pane.heightProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) -> {
       imageViewBackground.setFitHeight(newSceneHeight.doubleValue() - 70);
     });
+
+    populateHospitalsTableButton.setOnAction(event -> {
+      try {
+        List<HospitalWithSpecialization> hospitals = HospitalsTabRequest.requestFillHospitalsTable(cityInHospitalTab.getText(), specializationInHospitalTab.getText(), token);
+        HospitalTableControl.initializeHospitalTable(hospitals, hospitalsTable, hospitalName, hospitalCity, hospitalRegion, hospitalStreet, hospitalStreetNumber, hospitalPhone, hospitalEmail,
+            webSite);
+      }
+      catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
+    
+    HospitalTableControl.tableRowControl(hospitalsTable);
   }
 }

@@ -22,5 +22,8 @@ public class Consts {
 
   public static final String PATIENT_PROFILE_URL = "http://localhost:8080/patients/profile";
   public static final String OPENSHIFT_PATIENT_PROFILE_URL = "http://licenta-licenta.193b.starter-ca-central-1.openshiftapps.com/patients/profile";
+  
+  public static final String FILL_HOSPITALS_TABLE_URL = "http://localhost:8080/hospitals/filter";
+  public static final String OPENSHIFT_FILL_HOSPITALS_TABLE_URL = "http://licenta-licenta.193b.starter-ca-central-1.openshiftapps.com/hospitals/filter";
 
 }

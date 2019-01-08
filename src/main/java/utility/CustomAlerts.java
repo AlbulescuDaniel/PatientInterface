@@ -49,6 +49,14 @@ public class CustomAlerts {
     alert.setContentText("This patient does not have any prescription in this period");
     alert.showAndWait();
   }
+  
+  public static void showemptyHospitalListAlert() {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle("Empty list");
+    alert.setHeaderText("Hospitals:");
+    alert.setContentText("There is no hospitals");
+    alert.showAndWait();
+  }
 
   public static void showEmptyFieldsAlert() {
     Alert alert = new Alert(AlertType.ERROR);
@@ -96,8 +104,6 @@ public class CustomAlerts {
       stage.setScene(new Scene((AnchorPane)loader.load()));
     }
     catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     }
 
     stage.setResizable(false);
