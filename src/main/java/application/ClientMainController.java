@@ -322,6 +322,8 @@ public class ClientMainController {
         }
         catch (Exception e1) {
         }
+        logOutComboBox.getItems().removeAll(logOutComboBox.getItems());
+        logOutComboBox.setItems(FXCollections.observableArrayList("Logout", "Profile"));
       }
     });
 
